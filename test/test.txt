@@ -1,0 +1,4 @@
+Test All classes in Models
+Test if User takes in information
+Test if Items are saved in db
+wrote base test if db is created and deleted
