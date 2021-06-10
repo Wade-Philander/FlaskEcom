@@ -25,3 +25,4 @@ class TestAllModel(BaseTest):
             self.assertIsNone(result)
             db.session.add(new_item)
             db.session.commit()
+            
