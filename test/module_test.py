@@ -34,12 +34,17 @@ class TestAllModels(TestCase):
 
         self.assertTrue(my_pass)
 
-    def test_check_pass(self):
-        new_user = User(username='wade', email_address='wade@gmail.com', password_hash='wadeb', budget=1000)
-        password = bcrypt.generate_password_hash(new_user)
-        new_pass = bcrypt.check_password_hash(password, 'wadeb')
-        #self.assertTrue(new_pass)
-        print(password)
+
+# MAKE THIS AN INTEGRATION TEST
+    # def test_check_password_correction(self):
+    #     new_user = User(username='wade', email_address='wade@gmail.com', password_hash='wadeb', budget=1000)
+    #     print(new_user.password_hash)
+
+    #     #password = bcrypt.generate_password_hash(new_user)
+    #     #new_pass = bcrypt.check_password_hash(password, 'wadeb')#
+    #     #self.assertTrue(new_pass)
+    #     #print(password)
+
         
 
     def test_password_setter(self):

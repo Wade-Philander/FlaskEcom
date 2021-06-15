@@ -1,30 +1,28 @@
-from unittest import TestCase
-from market import app
-from market.__init__ import db, app
+from test.base_test import BaseTest, db
 
-class TestRoute(TestCase):
+class TestRoute(BaseTest):
     def test_home(self):
-        with app.test_client() as client:
-            response = client.get('/home')
-            
-            self.assertEqual(response.status_code, 200)
-            self.assertIn(b'/home', response.get_data())
+        with self.app:
+            with self.app_context:
+                response = self.app.get('/home')
+                self.assertEqual(response.status_code, 200)
+                self.assertIn(b'Welcome to Jim Shaped Coding Market', response.data)
 
     def test_register(self):
-        with app.test_client() as client:
-            response = client.get('/register')
+        with self.app:
+            response = self.app.get('/register')
             
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'/register', response.get_data())
 
     def test_login(self):
-        with app.test_client() as client:
-            response = client.get('/login')
+        with self.app:
+            response = self.app.get('/login')
             
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'/login', response.get_data())
 
     def test_logout(self):
-        with app.test_client() as client:
-            response = client.get('/logout')
+        with self.app:
+            response = self.app.get('/logout')
             self.assertEqual(response.status_code, 302)
