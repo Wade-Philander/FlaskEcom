@@ -101,3 +101,4 @@ class TestForms(BaseTest):
             response = self.app.post('/market', data=dict(sold_item='Phone'), follow_redirects=True)
 
             self.assertIn(b'Error', response.data)
+ 
