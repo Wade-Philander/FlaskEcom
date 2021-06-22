@@ -1,8 +1,9 @@
 from unittest import TestCase
 from market import bcrypt
 from market.models import User, Item
+from test.base_test import BaseTest, db
 
-class TestAllModels(TestCase):
+class TestAllModels(BaseTest):
 
     def test_users(self):
         new_user = User(username='wade', email_address='wade@gmail.com', password_hash='wade', budget=100)
@@ -80,3 +81,34 @@ class TestAllModels(TestCase):
         item = Item(name='car', price=15, barcode='white', description='test')
         
         self.assertEqual(item.__repr__(), "Item car")
+
+    def test_sell_method(self):
+        with self.app:
+            with self.app_context:
+                response = self.app.post('/register', data=dict(
+                    username='kevin', email_address='okay1@gmail.com',
+                    password1='password', password2='password'), follow_redirects=True)
+                user = db.session.query(User).filter_by(username='kevin').first()
+                self.assertTrue(user)
+                
+                response1 = self.app.post('/register', data=dict(
+                    username='carl', email_address='okay2@gmail.com',
+                    password1='password', password2='password'), follow_redirects=True)
+                user1 = db.session.query(User).filter_by(username='carl').first()
+                self.assertTrue(user1)
+                
+                
+                item = Item(id=1, name="vans", price=2000, barcode=123456, description="white", owner=1)
+                db.session.add(item)
+                db.session.commit()
+                
+                items = db.session.query(Item).filter_by(name="vans")
+
+                
+                self.assertTrue(items)
+
+                
+                self.assertTrue(user.can_sell(item_obj=item))
+
+                    
+                self.assertFalse(user1.can_sell(item_obj=item))

@@ -41,15 +41,15 @@ class TestForms(BaseTest):
                 user = db.session.query(User).filter_by(email_address='test3@test.com').first()
                 self.assertTrue(user)
                 self.assertIn(b'Account created successfully! You are now logged in as test3', response.data)
-                self.assertEqual(current_user.get_id(), '3')
+                self.assertEqual(current_user.get_id(), '1')
                 
                 response = self.app.post('/login', data=dict(username='test3', email_address='test3@test.com', password='password'), follow_redirects=True)
                 self.assertTrue(user)
             
-                response = self.app.get('/log-out', follow_redirects=True)
+                response = self.app.get('/logout', follow_redirects=True)
                 self.assertEqual(response.status_code, 200)
         
-                self.assertIn('/log-in', request.url)
+                self.assertIn('/home', request.url)
                 self.assertFalse(current_user.is_active)
     
     def test_market(self):
@@ -91,14 +91,15 @@ class TestForms(BaseTest):
             user = db.session.query(User).filter_by(username='test').first()
             self.assertEqual(user.username, 'test')
 
-            item = Item(id=1, name='Phone', price=100, barcode='123456789', description='describe', owner=23)
+            item = Item(id=1, name='Phone', price=100, barcode='123456789', description='describe', owner=1)
 
             db.session.add(item)
+            
             db.session.commit()
 
-            self.assertEqual(user.items, [])
+            self.assertTrue(user.items,'Phone')
 
             response = self.app.post('/market', data=dict(sold_item='Phone'), follow_redirects=True)
 
-            self.assertIn(b'Error', response.data)
+            self.assertIn(b'Congratulations! You sold Phone back to market!', response.data)
  

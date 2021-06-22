@@ -13,10 +13,10 @@ class TestRegister(BaseTest):
                 password1='qwerty', password2='qwerty'
             ), follow_redirects=True)
             class Username():
-                data = 'jack'
+                data = 'fred'
             with self.assertRaises(ValidationError) as context:
                 RegisterForm().validate_username(Username)
-                self.assertEqual('Username already exists! Please try a', str(context.exception))
+                self.assertEqual('Username already exists! Please try a different username', str(context.exception))
             
     def test_a_valid_email(self):
         with self.app:
@@ -27,7 +27,7 @@ class TestRegister(BaseTest):
                 password2='qwerty'
             ), follow_redirects=True)
             class Email():
-                data = 'jack'
+                data = 'i@gmail.com'
             with self.assertRaises(ValidationError) as context:
                 RegisterForm().validate_email_address(Email)
-                self.assertEqual('Email Address already exists! Please try again', str(context.exception))
+                self.assertEqual('Email Address already exists! Please try a different email address', str(context.exception))
